@@ -1,20 +1,19 @@
-import { Outlet, NavLink } from "react-router"
+import { Outlet } from "react-router"
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/AppSidebar"
 
 export default function RootLayout() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header>
-        <nav>
-          <NavLink to="/" end className={({ isActive }) => isActive ? "active" : ""}>Home</NavLink>
-          {" | "}
-          <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>About</NavLink>
-          {" | "}
-          <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active" : ""}>Dashboard</NavLink>
-        </nav>
-      </header>
-      <main className="flex-1">
-        <Outlet />
-      </main>
-    </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+          <SidebarTrigger />
+        </header>
+        <main className="flex-1 p-4">
+          <Outlet />
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
