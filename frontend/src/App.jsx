@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router"
 import RootLayout from "@/layouts/RootLayout"
 import Home from "@/pages/Home"
+import Chat from "@/pages/Chat"
 import About from "@/pages/About"
 import NotFound from "@/pages/NotFound"
 import Dashboard from "@/pages/dashboard/Dashboard"
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route element={<RootLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="chat/:sessionId" element={<Chat />} />
           <Route path="about" element={<About />} />
           <Route path="dashboard" element={<Dashboard />}>
             <Route index element={<DashboardHome />} />
