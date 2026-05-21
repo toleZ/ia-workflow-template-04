@@ -1,16 +1,23 @@
 import logging
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
+from sqlalchemy import Engine
+from pydantic import BaseModel
 
-from app.core.database import get_db
+from app.core.database import get_db, get_analytics_db
 from app.schemas.session import SessionCreate, SessionRead
 from app.schemas.message import MessageCreate, MessageRead
 from app.services import session as session_svc
 from app.services import message as message_svc
+from app.services import chat as chat_svc
 
 logger = logging.getLogger("api.routers.session")
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
+
+
+class PromptRequest(BaseModel):
+    prompt: str
 
 
 @router.get("/", response_model=list[SessionRead])
@@ -35,3 +42,14 @@ def list_messages(session_id: int, skip: int = 0, limit: int = 100, db: Session 
 def create_message(session_id: int, data: MessageCreate, db: Session = Depends(get_db)):
     logger.info("POST /sessions/%d/messages role=%s", session_id, data.role)
     return message_svc.create_message(db, session_id, data)
+
+
+@router.post("/{session_id}/chat", response_model=MessageRead)
+def chat_with_agent(
+    session_id: int,
+    data: PromptRequest,
+    db: Session = Depends(get_db),
+    analytics_db: Engine = Depends(get_analytics_db),
+):
+    logger.info("POST /sessions/%d/chat", session_id)
+    return chat_svc.process_chat(db, analytics_db, session_id, data.prompt)
