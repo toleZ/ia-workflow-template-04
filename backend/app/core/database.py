@@ -11,9 +11,14 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Analytics Database (PostgreSQL placeholder)
-# We use a placeholder URL if none is provided to avoid engine creation errors
-analytics_url = settings.analytics_database_url or "postgresql://user:pass@localhost/placeholder"
-analytics_engine = create_engine(analytics_url)
+# We only create the engine if a real analytics URL is provided.
+# Otherwise, we use a NullPool to avoid driver requirements on startup.
+if settings.analytics_database_url:
+    analytics_engine = create_engine(settings.analytics_database_url)
+else:
+    # Use a dummy sqlite memory DB as a safe placeholder that requires no external drivers
+    analytics_engine = create_engine("sqlite:///:memory:")
+
 AnalyticsSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=analytics_engine)
 
 
