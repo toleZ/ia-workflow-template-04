@@ -1,17 +1,40 @@
 import { useParams } from "react-router"
+import { MOCK_SESSIONS } from "@/mocks/chat-data"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { cn } from "@/lib/utils"
 
 export default function Chat() {
   const { sessionId } = useParams()
+  const session = MOCK_SESSIONS.find((s) => s.id === Number(sessionId))
+
+  if (!session) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p className="text-muted-foreground italic">Session not found</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="flex flex-col h-full items-center justify-center space-y-4">
-      <h1 className="text-2xl font-bold">Chat Session</h1>
-      <p className="text-muted-foreground text-lg">
-        Currently viewing session ID: <span className="font-mono text-primary">{sessionId}</span>
-      </p>
-      <div className="p-4 bg-muted rounded-lg border border-border max-w-md text-center italic">
-        This is a placeholder for the chat interface. In the next story, we will render the actual message history from the mock data.
-      </div>
+    <div className="flex flex-col h-full">
+      <ScrollArea className="flex-1 p-4">
+        <div className="flex flex-col gap-4">
+          {session.messages.map((message) => (
+            <div
+              key={message.id}
+              style={{ contentVisibility: "auto" }}
+              className={cn(
+                "flex w-max max-w-[80%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                message.role === "user"
+                  ? "ml-auto bg-primary text-primary-foreground"
+                  : "bg-muted"
+              )}
+            >
+              {message.content}
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
     </div>
   )
 }
