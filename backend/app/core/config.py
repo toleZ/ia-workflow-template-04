@@ -7,7 +7,8 @@ class Settings(BaseSettings):
     app_version: str = "0.1.0"
     debug: bool = False
     database_url: str = "sqlite:///./app.db"
-    allowed_origins: str = "http://localhost:3000"
+    analytics_database_url: str = ""
+    allowed_origins: str = "http://localhost:3000,http://localhost:5173"
     log_level: str = "INFO"
 
     @field_validator("allowed_origins", mode="before")

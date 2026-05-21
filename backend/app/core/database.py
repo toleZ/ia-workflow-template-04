@@ -10,6 +10,17 @@ engine = create_engine(
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+# Analytics Database (PostgreSQL placeholder)
+# We only create the engine if a real analytics URL is provided.
+# Otherwise, we use a NullPool to avoid driver requirements on startup.
+if settings.analytics_database_url:
+    analytics_engine = create_engine(settings.analytics_database_url)
+else:
+    # Use a dummy sqlite memory DB as a safe placeholder that requires no external drivers
+    analytics_engine = create_engine("sqlite:///:memory:")
+
+AnalyticsSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=analytics_engine)
+
 
 class Base(DeclarativeBase):
     pass
@@ -17,6 +28,14 @@ class Base(DeclarativeBase):
 
 def get_db():
     db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+def get_analytics_db():
+    db = AnalyticsSessionLocal()
     try:
         yield db
     finally:
