@@ -2,15 +2,17 @@ import { useState, useEffect } from "react"
 import { useParams } from "react-router"
 import { api } from "@/lib/api"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Send } from "lucide-react"
+import { Send, AlertTriangle } from "lucide-react"
 
 export default function Chat() {
   const { sessionId } = useParams()
   const [messages, setMessages] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [inputValue, setInputValue] = useState("")
   const [isTyping, setIsTyping] = useState(false)
 
@@ -20,14 +22,18 @@ export default function Chat() {
 
     async function fetchHistory() {
       setIsLoading(true)
+      setError(null)
       setMessages([]) // Reset messages for new session
       try {
         const data = await api.get(`/sessions/${sessionId}/messages/`)
         if (isMounted) {
           setMessages(data)
         }
-      } catch (error) {
-        console.error("Failed to fetch message history:", error)
+      } catch (err) {
+        console.error("Failed to fetch message history:", err)
+        if (isMounted) {
+          setError("I couldn't load the chat history. The server might be offline.")
+        }
       } finally {
         if (isMounted) {
           setIsLoading(false)
@@ -91,8 +97,27 @@ export default function Chat() {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div className="text-muted-foreground animate-pulse">Loading history...</div>
+      <div className="flex flex-col h-full">
+        <div className="flex-1 p-4 space-y-4">
+          <Skeleton className="h-12 w-[60%] rounded-lg" />
+          <Skeleton className="h-12 w-[40%] ml-auto rounded-lg" />
+          <Skeleton className="h-12 w-[70%] rounded-lg" />
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center p-8 text-center space-y-4">
+        <div className="p-3 bg-destructive/10 rounded-full text-destructive">
+          <AlertTriangle className="size-8" />
+        </div>
+        <h2 className="text-xl font-semibold text-foreground">Connection Error</h2>
+        <p className="text-muted-foreground max-w-sm">{error}</p>
+        <Button variant="outline" onClick={() => window.location.reload()}>
+          Retry Connection
+        </Button>
       </div>
     )
   }

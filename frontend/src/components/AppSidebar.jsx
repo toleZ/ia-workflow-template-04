@@ -11,22 +11,27 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import { MessageSquarePlus } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
+import { MessageSquarePlus, AlertCircle } from "lucide-react"
 import { NavLink, useNavigate } from "react-router"
 import { api } from "@/lib/api"
 
 export function AppSidebar() {
   const [sessions, setSessions] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchSessions() {
+      setIsLoading(true)
+      setError(null)
       try {
         const data = await api.get("/sessions/")
         setSessions(data)
-      } catch (error) {
-        console.error("Failed to fetch sessions:", error)
+      } catch (err) {
+        console.error("Failed to fetch sessions:", err)
+        setError("Failed to load history")
       } finally {
         setIsLoading(false)
       }
@@ -55,8 +60,15 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {isLoading ? (
-                <div className="px-4 py-2 text-sm text-muted-foreground animate-pulse">
-                  Loading sessions...
+                <div className="flex flex-col gap-2 px-2">
+                  <Skeleton className="h-9 w-full" />
+                  <Skeleton className="h-9 w-[90%]" />
+                  <Skeleton className="h-9 w-full" />
+                </div>
+              ) : error ? (
+                <div className="flex items-center gap-2 px-4 py-2 text-xs text-destructive bg-destructive/10 rounded-md mx-2">
+                  <AlertCircle className="size-3" />
+                  <span>{error}</span>
                 </div>
               ) : sessions.length === 0 ? (
                 <div className="px-4 py-2 text-sm text-muted-foreground italic">
