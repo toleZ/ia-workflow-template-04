@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router"
-import { MOCK_SESSIONS } from "@/mocks/chat-data"
+import { api } from "@/lib/api"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -9,28 +9,42 @@ import { Send } from "lucide-react"
 
 export default function Chat() {
   const { sessionId } = useParams()
-  const session = MOCK_SESSIONS.find((s) => s.id === Number(sessionId))
-
   const [messages, setMessages] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [inputValue, setInputValue] = useState("")
   const [isTyping, setIsTyping] = useState(false)
 
-  // Sync state when session changes
+  // Fetch real history when session changes
   useEffect(() => {
-    if (session) {
-      setMessages(session.messages)
+    let isMounted = true
+
+    async function fetchHistory() {
+      setIsLoading(true)
+      setMessages([]) // Reset messages for new session
+      try {
+        const data = await api.get(`/sessions/${sessionId}/messages/`)
+        if (isMounted) {
+          setMessages(data)
+        }
+      } catch (error) {
+        console.error("Failed to fetch message history:", error)
+      } finally {
+        if (isMounted) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    if (sessionId) {
+      fetchHistory()
       setInputValue("")
       setIsTyping(false)
     }
-  }, [sessionId, session])
 
-  if (!session) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-muted-foreground italic">Session not found</p>
-      </div>
-    )
-  }
+    return () => {
+      isMounted = false
+    }
+  }, [sessionId])
 
   const handleSend = (e) => {
     e.preventDefault()
@@ -47,12 +61,12 @@ export default function Chat() {
     setInputValue("")
     setIsTyping(true)
 
-    // Simulate AI response delay
+    // Simulate AI response delay for now (Fully integrated in STORY-004)
     setTimeout(() => {
       const assistantMessage = {
         id: Date.now() + 1,
         role: "assistant",
-        content: `This is a mock response to: "${userMessage.content}". Once the real backend is connected, you will see actual database analysis here.`,
+        content: `This is a mock response to: "${userMessage.content}". Once STORY-004 is finished, this will be real.`,
         created_at: new Date().toISOString(),
       }
       setMessages((prev) => [...prev, assistantMessage])
@@ -60,24 +74,38 @@ export default function Chat() {
     }, 1500)
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-muted-foreground animate-pulse">Loading history...</div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1 p-4">
         <div className="flex flex-col gap-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              style={{ contentVisibility: "auto" }}
-              className={cn(
-                "flex w-max max-w-[80%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
-                message.role === "user"
-                  ? "ml-auto bg-primary text-primary-foreground"
-                  : "bg-muted"
-              )}
-            >
-              {message.content}
+          {messages.length === 0 && !isTyping ? (
+            <div className="text-center py-10 text-muted-foreground italic">
+              No messages in this conversation.
             </div>
-          ))}
+          ) : (
+            messages.map((message) => (
+              <div
+                key={message.id}
+                style={{ contentVisibility: "auto" }}
+                className={cn(
+                  "flex w-max max-w-[80%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                  message.role === "user"
+                    ? "ml-auto bg-primary text-primary-foreground"
+                    : "bg-muted"
+                )}
+              >
+                {message.content}
+              </div>
+            ))
+          )}
           {isTyping && (
             <div className="flex w-max max-w-[80%] flex-col gap-2 rounded-lg px-3 py-2 text-sm bg-muted animate-pulse">
               Typing...
