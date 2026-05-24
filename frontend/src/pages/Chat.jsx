@@ -46,32 +46,47 @@ export default function Chat() {
     }
   }, [sessionId])
 
-  const handleSend = (e) => {
+  const handleSend = async (e) => {
     e.preventDefault()
     if (!inputValue.trim() || isTyping) return
 
-    const userMessage = {
+    const promptText = inputValue
+
+    // 1. Optimistic UI update for user message
+    const optimisticUserMessage = {
       id: Date.now(),
       role: "user",
-      content: inputValue,
+      content: promptText,
       created_at: new Date().toISOString(),
     }
 
-    setMessages((prev) => [...prev, userMessage])
+    setMessages((prev) => [...prev, optimisticUserMessage])
     setInputValue("")
     setIsTyping(true)
 
-    // Simulate AI response delay for now (Fully integrated in STORY-004)
-    setTimeout(() => {
-      const assistantMessage = {
-        id: Date.now() + 1,
-        role: "assistant",
-        content: `This is a mock response to: "${userMessage.content}". Once STORY-004 is finished, this will be real.`,
-        created_at: new Date().toISOString(),
-      }
+    // 2. Real API call to the AI Agent
+    try {
+      const assistantMessage = await api.post(`/sessions/${sessionId}/chat`, {
+        prompt: promptText,
+      })
+      
+      // 3. Append real backend response
       setMessages((prev) => [...prev, assistantMessage])
+    } catch (error) {
+      console.error("AI chat failed:", error)
+      // Fallback for errors
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          role: "assistant",
+          content: "Sorry, I encountered an error connecting to the AI Agent. Please check if the backend is running.",
+          created_at: new Date().toISOString(),
+        },
+      ])
+    } finally {
       setIsTyping(false)
-    }, 1500)
+    }
   }
 
   if (isLoading) {
