@@ -14,8 +14,8 @@ All stories commit on the epic branch `epic/PRD-006-postgres-migration`. No per-
 
 | ID | Title | Type | Status | Complexity | Plan | Commit |
 |----|-------|------|--------|------------|------|--------|
-| STORY-001 | PostgreSQL Infrastructure Setup | technical | ✅ done | small | [plan](../../plans/PRD-006-postgresql-migration/completed/STORY-001-infrastructure-docker-setup.plan.md) | `27368ef` |
-| STORY-002 | Sample Dataset Initialization | feature | ⬜ todo | small | — | — |
+| STORY-001 | PostgreSQL Infrastructure Setup | technical | ✅ done | small | [plan](../../plans/PRD-006-postgresql-migration/completed/STORY-001-infrastructure-docker-setup.plan.md) | `ad409cc` |
+| STORY-002 | Sample Dataset Initialization | feature | ✅ done | small | [plan](../../plans/PRD-006-postgresql-migration/completed/STORY-002-sample-dataset-initialization.plan.md) | `53d718a` |
 | STORY-003 | Backend Dual Database Configuration | technical | ⬜ todo | small | — | — |
 | STORY-004 | Agent Analytical Tools Implementation | feature | ⬜ todo | medium | — | — |
 

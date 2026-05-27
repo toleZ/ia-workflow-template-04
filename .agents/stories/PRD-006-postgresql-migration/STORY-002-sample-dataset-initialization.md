@@ -7,12 +7,12 @@ type: feature
 priority: medium
 complexity: small
 phase: 1
-status: todo
+status: done
 labels: [database, data]
 epic_branch: epic/PRD-006-postgres-migration
-plan: null
-report: null
-commit: null
+plan: .agents/plans/PRD-006-postgresql-migration/completed/STORY-002-sample-dataset-initialization.plan.md
+report: .agents/reports/PRD-006-postgresql-migration/STORY-002-sample-dataset-initialization.report.md
+commit: 53d718a9ff072a30e054b57fb19e2f9db2062327
 depends_on: [STORY-001]
 blocks: [STORY-004]
 skills: []
