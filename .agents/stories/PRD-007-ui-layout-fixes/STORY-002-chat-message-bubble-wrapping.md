@@ -7,12 +7,12 @@ type: bug
 priority: high
 complexity: small
 phase: 2
-status: todo
+status: done
 labels: [frontend, ui]
 epic_branch: epic/PRD-007-ui-layout-fixes
-plan: null
-report: null
-commit: null
+plan: .agents/plans/PRD-007-ui-layout-fixes/completed/STORY-002-chat-message-bubble-wrapping.plan.md
+report: .agents/reports/PRD-007-ui-layout-fixes/STORY-002-chat-message-bubble-wrapping.report.md
+commit: 90c988e7b61f66cd10e6b691a1d8c93a2903b481
 depends_on: [STORY-001]
 blocks: []
 skills: []

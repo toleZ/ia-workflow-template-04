@@ -136,7 +136,7 @@ export default function Chat() {
                 key={message.id}
                 style={{ contentVisibility: "auto" }}
                 className={cn(
-                  "flex w-max max-w-[80%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                  "flex w-fit max-w-[85%] flex-col gap-2 rounded-lg px-3 py-2 text-sm break-words whitespace-pre-wrap",
                   message.role === "user"
                     ? "ml-auto bg-primary text-primary-foreground"
                     : "bg-muted"
@@ -147,7 +147,7 @@ export default function Chat() {
             ))
           )}
           {isTyping && (
-            <div className="flex w-max max-w-[80%] flex-col gap-2 rounded-lg px-3 py-2 text-sm bg-muted animate-pulse">
+            <div className="flex w-fit max-w-[85%] flex-col gap-2 rounded-lg px-3 py-2 text-sm bg-muted animate-pulse break-words whitespace-pre-wrap">
               Typing...
             </div>
           )}

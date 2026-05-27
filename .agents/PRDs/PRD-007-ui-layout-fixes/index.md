@@ -2,11 +2,11 @@
 
 **PRD**: [PRD.md](./PRD.md)
 **Epic Branch**: `epic/PRD-007-ui-layout-fixes` (base: `main`)
-**Status**: active
+**Status**: done
 
 ## Progress
 
-0/2 stories done — 0%
+2/2 stories done — 100%
 
 ## Stories
 
@@ -14,8 +14,8 @@ All stories commit on the epic branch `epic/PRD-007-ui-layout-fixes`. No per-sto
 
 | ID | Title | Type | Status | Complexity | Plan | Commit |
 |----|-------|------|--------|------------|------|--------|
-| STORY-001 | Fix Global Horizontal Overflow | bug | ✅ done | small | [plan](../../plans/PRD-007-ui-layout-fixes/completed/STORY-001-fix-global-horizontal-overflow.plan.md) | `c9dfa28` |
-| STORY-002 | Chat Message Bubble Wrapping & Containment | bug | ⬜ todo | small | — | — |
+| STORY-001 | Fix Global Horizontal Overflow | bug | ✅ done | small | [plan](../../plans/PRD-007-ui-layout-fixes/completed/STORY-001-fix-global-horizontal-overflow.plan.md) | `892b4ba` |
+| STORY-002 | Chat Message Bubble Wrapping & Containment | bug | ✅ done | small | [plan](../../plans/PRD-007-ui-layout-fixes/completed/STORY-002-chat-message-bubble-wrapping.plan.md) | `90c988e` |
 
 ## Status Icons
 - ⬜ todo
