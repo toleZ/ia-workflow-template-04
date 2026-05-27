@@ -7,12 +7,12 @@ type: feature
 priority: high
 complexity: medium
 phase: 3
-status: todo
+status: done
 labels: [backend, ai, agent]
 epic_branch: epic/PRD-006-postgres-migration
-plan: null
-report: null
-commit: null
+plan: .agents/plans/PRD-006-postgresql-migration/completed/STORY-004-agent-analytical-tools.plan.md
+report: .agents/reports/PRD-006-postgresql-migration/STORY-004-agent-analytical-tools.report.md
+commit: e476d19e7f6033aa5494e2b1b61ac766092f84cc
 depends_on: [STORY-002, STORY-003]
 blocks: []
 skills: [building-pydantic-ai-agents]

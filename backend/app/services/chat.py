@@ -61,7 +61,7 @@ def process_chat(
         ai_message = message_svc.create_message(
             db, 
             session_id, 
-            MessageCreate(role="assistant", content=result.data)
+            MessageCreate(role="assistant", content=result.output)
         )
         
         return ai_message

@@ -35,8 +35,4 @@ def get_db():
 
 
 def get_analytics_db():
-    db = AnalyticsSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    yield analytics_engine
