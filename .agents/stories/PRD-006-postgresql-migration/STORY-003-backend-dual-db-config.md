@@ -7,12 +7,12 @@ type: technical
 priority: high
 complexity: small
 phase: 2
-status: todo
+status: done
 labels: [backend, config]
 epic_branch: epic/PRD-006-postgres-migration
-plan: null
-report: null
-commit: null
+plan: .agents/plans/PRD-006-postgresql-migration/completed/STORY-003-backend-dual-db-config.plan.md
+report: .agents/reports/PRD-006-postgresql-migration/STORY-003-backend-dual-db-config.report.md
+commit: 76d30fdbc1333d0d8d7080fa9727de398eb041c6
 depends_on: [STORY-001]
 blocks: [STORY-004]
 skills: [fastapi-python]

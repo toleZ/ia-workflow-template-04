@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     analytics_database_url: str = ""
     allowed_origins: str = "http://localhost:3000,http://localhost:5173"
     log_level: str = "INFO"
+    openai_api_key: str = ""
 
     @field_validator("allowed_origins", mode="before")
     @classmethod
@@ -23,6 +24,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
+        extra="allow"
     )
 
 
