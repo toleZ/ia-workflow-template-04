@@ -2,7 +2,7 @@ import logging
 from sqlalchemy.orm import Session
 from sqlalchemy import Engine
 
-from pydantic_ai.messages import ModelMessage, ModelRequest, ModelResponse, TextPart
+from pydantic_ai.messages import ModelMessage, ModelRequest, ModelResponse, TextPart, UserPromptPart
 from app.services.agent import db_analyst_agent, AgentDeps
 from app.services import session as session_svc
 from app.services import message as message_svc
@@ -16,7 +16,7 @@ def _format_history(messages: list[MessageRead]) -> list[ModelMessage]:
     history: list[ModelMessage] = []
     for msg in messages:
         if msg.role == "user":
-            history.append(ModelRequest(parts=[TextPart(content=msg.content)]))
+            history.append(ModelRequest(parts=[UserPromptPart(content=msg.content)]))
         elif msg.role == "assistant":
             history.append(ModelResponse(parts=[TextPart(content=msg.content)]))
     return history
